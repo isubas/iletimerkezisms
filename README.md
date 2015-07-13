@@ -1,6 +1,6 @@
 # IletimerkeziSMS
 	iletimerkezi.com API'lerini kullanarak toplu sms gönderme ve raporlama işlemlerini yapabilmek için hazarlanan Ruby Gem'idir.
-
+[![Gem Version](https://badge.fury.io/rb/iletimerkezisms.svg)](http://badge.fury.io/rb/iletimerkezisms)
 ## Setup
 
 ```
