@@ -111,3 +111,5 @@ Status Code  	| Status Message
 456  | Sipariş gönderim tarihi henüz gelmedi
 457  | Mesaj gönderim tarihinin formatı hatalı
 503  | Sunucu geçici olarak servis dışı
+
+İletişim ve öneriler için, irfansubas08@gmail.com
