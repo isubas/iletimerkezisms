@@ -14,7 +14,7 @@ iletimerkezi.com üzerinden toplu sms servisi kullanabilmeniz için verilen kull
 - username: "username"
 - password: "password"
 - Desteklenen telefon numara formatları: ["905xxxxxxxxx"," +90 5xx xxx xx xx", "5xxxxxxxxx"]
-
+- sender: iletimerkezi.com yönetim panelinden tanımlamış ve iletimerkezi.com tarafından onaylanmış, maksimum 11 karakterden oluşan başlık bilgisidir. Gönderilen mesaj, alıcıya bu parametre ile belirtilen başlık ile yollanır. İstek yapılırken gönderilmesi zorunludur. URL encode işleminden geçirilmelidir
 ### SMS Gönderme
 ``` ruby
 require 'iletimerkezisms'
