@@ -26,7 +26,7 @@ module IletimerkeziSMS
             xlm.sender argv[:sender]
             xlm.sendDateTime Time.now.strftime("%d/%m/%Y %H:%M")
             xlm.message {
-              xlm.text argv[:message]
+              xlm.text_ argv[:message]
               xlm.receipents{
                 argv[:numbers].each do |n|
                   xlm.number n
@@ -62,7 +62,7 @@ module IletimerkeziSMS
             xlm.sendDateTime Time.now.strftime("%d/%m/%Y %H:%M")
             argv[:messages].each do |message|
               xlm.message {
-                xlm.text message[:text]
+                xlm.text_ message[:text]
                 xlm.receipents{
                   message[:numbers].each do |n|
                     xlm.number n
@@ -89,7 +89,7 @@ module IletimerkeziSMS
             xlm.password @password
           }
           xlm.order {
-            xlm.id order_id.to_s
+            xlm.id_ order_id.to_s
           }
         }
       end

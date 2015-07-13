@@ -25,7 +25,7 @@ module IletimerkeziSMS
             xml.password @password
           }
           xml.order{
-            xml.id argv[:id]
+            xml.id_ argv[:id]
             xml.page argv[:page]
             xml.rowCount argv[:rowCount]
           }
