@@ -53,7 +53,7 @@ response =>
 
 ```
 
-### RAPORLAMA
+### Raporlama
 ``` ruby
 require 'iletimerkezisms'
 
@@ -85,7 +85,7 @@ request => IletimerkeziSMS.balance(username, password)
 response => {"status"=>{"code"=>"200", "message"=>"İşlem başarılı"}, "balance"=>{"amount"=>"0.0000", "sms"=>"4"}}
 
 ```
-## API Dökünanı
+## API Dökümanı
 Geliştirmeleri yaparken kullanılan [api dökümanı](https://docs.google.com/document/d/19mYfmnx_BAoO5tPjz2qrCE9LK9qNrafAVZTNqHmi1tQ/edit)
 ## Status Kodlarının Karşılıkları
 
