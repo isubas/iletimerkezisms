@@ -24,7 +24,7 @@ require 'iletimerkezisms'
  
 argv = {:sender=>"ILETI MRKZI", :message=>"Lorem ipsum ...", :numbers=>["905xxxxxxxxx"," +90 5xx xxx xx xx", "5xxxxxxxxx"]}
 
-request => Iletimerkezi.send(username, password, argv)
+request => IletimerkeziSMS.send(username, password, argv)
 
 response => {"status"=>{"code"=>"200", "message"=>"İşlem başarılı"},"order"=>{"id"=>"order_id"}}
 
@@ -39,7 +39,7 @@ argv = {sender: "ILETI MRKZI",
                          {text: "Deneme mesajı üç", numbers: ["905xxxxxxxxx"]}
                        ]
                      }
-request => Iletimerkezi.multi_send(username, password, argv)
+request => IletimerkeziSMS.multi_send(username, password, argv)
 
 response => {"status"=>{"code"=>"200", "message"=>"İşlem başarılı"},"order"=>{"id"=>"order_id"}}
 
@@ -47,7 +47,7 @@ response => {"status"=>{"code"=>"200", "message"=>"İşlem başarılı"},"order"
 
 order_id: Sms gönderme işlemi sonrasında sunucu tarafından gelen cevaptan bulabilirsiniz.(order_id = response["order"]["id"])
 
-request => Iletimerkezi.cancel(username, password, order_id)
+request => IletimerkeziSMS.cancel(username, password, order_id)
 response =>
 
 ```
@@ -67,7 +67,7 @@ argv = {id: order_id page: 1, rowCount: 1000}
 # Varsayılan değeri 1000’dir. Maksimum değeri #1000’dir. 
 # Bir siparişte 1000’den fazla mesaj gönderilmişse ayrı bir istek ile diğer rapor sayfaları sorgulanmalıdır.
 
-request => Iletimerkezi.report(username, password, argv)
+request => IletimerkeziSMS.report(username, password, argv)
 response => {"status"=>{"code"=>"200", "message"=>"İşlem başarılı"},
  							"order"=>
 								  {"id"=>"7930802",
@@ -79,7 +79,7 @@ response => {"status"=>{"code"=>"200", "message"=>"İşlem başarılı"},
 
 # Hesabınızda kalan bakiye ve sms bilgisini elde etmenizi sağlar.
 
-request => Iletimerkezi.balance(username, password)
+request => IletimerkeziSMS.balance(username, password)
 
 response => {"status"=>{"code"=>"200", "message"=>"İşlem başarılı"}, "balance"=>{"amount"=>"0.0000", "sms"=>"4"}}
 
