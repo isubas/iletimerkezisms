@@ -30,12 +30,12 @@ argv = {
 	:numbers=>["905xxxxxxxxx"," +90 5xx xxx xx xx", "5xxxxxxxxx"]
 	}
 
-request => IletimerkeziSMS.send(username, password, argv)
+IletimerkeziSMS.send(username, password, argv)
 
 OR
 
 sms = IletimerkeziSMS::SMS.new(username, password)
-request => sms.send(argv)
+sms.send(argv)
 
 response => {
 		"status"=>{"code"=>"200", "message"=>"İşlem başarılı"},
@@ -56,12 +56,13 @@ argv = {sender: "ILETI MRKZI",
                          {text: "Deneme mesajı üç", numbers: ["905xxxxxxxxx"]}
                        ]
                      }
-request => IletimerkeziSMS.multi_send(username, password, argv)
+                     
+IletimerkeziSMS.multi_send(username, password, argv)
 
 OR
 
 sms = IletimerkeziSMS::SMS.new(username, password)
-request => sms.multi_send(argv)
+sms.multi_send(argv)
 
 response => {
 	     "status"=>{"code"=>"200", "message"=>"İşlem başarılı"},
@@ -76,12 +77,12 @@ response => {
 ``` ruby
 require 'iletimerkezisms'
 
-request => IletimerkeziSMS.cancel(username, password, order_id)
+IletimerkeziSMS.cancel(username, password, order_id)
 
 OR
 
 sms = IletimerkeziSMS::SMS.new(username, password)
-request => sms.cancel(order_id)
+sms.cancel(order_id)
 
 ```
 
@@ -97,14 +98,14 @@ Gönderilen sms(ler) hakkında rapor elde edebilmek için kullanılır
 ``` ruby
 require 'iletimerkezisms'
 
-argv = {id: order_id page: 1, rowCount: 1000}
+argv = {id: order_id, page: 1, rowCount: 1000}
 
-request => IletimerkeziSMS.report(username, password, argv)
+IletimerkeziSMS.report(username, password, argv)
 
 OR
 
 report_object = IletimerkeziSMS::REPORT.new(username, password)
-request => report_object.report(argv)
+report_object.report(argv)
 
 response => {
 	     "status"=>{"code"=>"200", "message"=>"İşlem başarılı"},
@@ -112,7 +113,7 @@ response => {
 		  {
 		   "id"=>"7930802",
 		   "status"=>"114",
-		   "message"=>{"number"=>"+905545967632", "status"=>"111"}
+		   "message"=>{"number"=>"+905xxxxxxxxx", "status"=>"111"}
 		  }
 	     }
 ```
@@ -124,12 +125,12 @@ response => {
 ``` ruby
 require 'iletimerkezisms'
 
-request => IletimerkeziSMS.balance(username, password)
+IletimerkeziSMS.balance(username, password)
 
 OR
 
 report_object = IletimerkeziSMS::REPORT.new(username, password)
-request => report_object.balance
+report_object.balance
 
 response => {
 		"status"=>{"code"=>"200", "message"=>"İşlem başarılı"},
