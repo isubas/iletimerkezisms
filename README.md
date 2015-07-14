@@ -1,8 +1,10 @@
 # IletimerkeziSMS
-	iletimerkezi.com API'lerini kullanarak toplu sms gönderme ve raporlama işlemlerini yapabilmek için hazarlanan Ruby Gem'idir.
-[![Gem Version](https://badge.fury.io/rb/iletimerkezisms.svg)](http://badge.fury.io/rb/iletimerkezisms)
-## Setup
 
+iletimerkezi.com API'lerini kullanarak toplu sms gönderme ve raporlama işlemlerini yapabilmek için hazarlanan Ruby Gem'idir.
+
+[![Gem Version](https://badge.fury.io/rb/iletimerkezisms.svg)](http://badge.fury.io/rb/iletimerkezisms)
+
+## Setup
 ```
 $ gem install 'iletimerkezisms'
 ```
@@ -16,22 +18,36 @@ iletimerkezi.com üzerinden toplu sms servisi kullanabilmeniz için verilen kull
 - Desteklenen telefon numara formatları: ["905xxxxxxxxx"," +90 5xx xxx xx xx", "5xxxxxxxxx"]
 - sender: iletimerkezi.com yönetim panelinden tanımlamış ve iletimerkezi.com tarafından onaylanmış, maksimum 11 karakterden oluşan başlık bilgisidir. Gönderilen mesaj, alıcıya bu parametre ile belirtilen başlık ile yollanır. İstek yapılırken gönderilmesi zorunludur. URL encode işleminden geçirilmelidir
 
-### SMS Gönderme
+## SMS Gönderme
+
+### Bir mesaj metnini birden fazla alıcıya göndermek için,
 ``` ruby
 require 'iletimerkezisms'
-=> Bir mesaj metnini birden fazla alıcıya göndermek için,
 
-# SMS göndermek için kullanıcak argumanlar,
- 
-argv = {:sender=>"ILETI MRKZI", :message=>"Lorem ipsum ...", :numbers=>["905xxxxxxxxx"," +90 5xx xxx xx xx", "5xxxxxxxxx"]}
+argv = {
+	:sender=>"ILETI MRKZI",
+	:message=>"Lorem ipsum ...",
+	:numbers=>["905xxxxxxxxx"," +90 5xx xxx xx xx", "5xxxxxxxxx"]
+	}
 
 request => IletimerkeziSMS.send(username, password, argv)
 
-response => {"status"=>{"code"=>"200", "message"=>"İşlem başarılı"},"order"=>{"id"=>"order_id"}}
+OR
 
-=> Birden fazla birbirinden farklı mesaj metnini birden fazla alıcıya göndermek için,
+sms = IletimerkeziSMS::SMS.new(username, password)
+request => sms.send(argv)
 
-# SMS göndermek için kullanıcak argumanlar,
+response => {
+		"status"=>{"code"=>"200", "message"=>"İşlem başarılı"},
+		"order"=>{"id"=>"order_id"}
+	    }
+
+```
+
+### Birden fazla birbirinden farklı mesaj metnini birden fazla alıcıya göndermek için,
+
+``` ruby
+require 'iletimerkezisms'
 
 argv = {sender: "ILETI MRKZI",
                        messages: [
@@ -42,51 +58,88 @@ argv = {sender: "ILETI MRKZI",
                      }
 request => IletimerkeziSMS.multi_send(username, password, argv)
 
-response => {"status"=>{"code"=>"200", "message"=>"İşlem başarılı"},"order"=>{"id"=>"order_id"}}
+OR
 
-=> Yapılan sms isteğini iptal etmek için,
+sms = IletimerkeziSMS::SMS.new(username, password)
+request => sms.multi_send(argv)
 
-order_id: Sms gönderme işlemi sonrasında sunucu tarafından gelen cevaptan bulabilirsiniz.(order_id = response["order"]["id"])
-
-request => IletimerkeziSMS.cancel(username, password, order_id)
-response =>
-
+response => {
+	     "status"=>{"code"=>"200", "message"=>"İşlem başarılı"},
+	     "order"=>{"id"=>"order_id"}
+	     }
 ```
 
-### Raporlama
+### Yapılan SMS isteğini iptal etmek için,
+
+- Not: order_id: Sms gönderme işlemi sonrasında sunucu tarafından gelen cevaptan bulabilirsiniz.(order_id = response["order"]["id"])
+
 ``` ruby
 require 'iletimerkezisms'
 
-=> Gönderilen sms(ler) hakkında rapor elde edebilmek için kullanılır.
-# SMS rapor oluşturabilmek için gönderileck argümanlar,
+request => IletimerkeziSMS.cancel(username, password, order_id)
+
+OR
+
+sms = IletimerkeziSMS::SMS.new(username, password)
+request => sms.cancel(order_id)
+
+```
+
+## (REPORT) Raporlama İşlemleri
+
+Gönderilen sms(ler) hakkında rapor elde edebilmek için kullanılır
+
+#### Raporlama ile ilgili bilinmesi gerekenler;
+
+- **page:** Rapor sayfasını ifade eder. İstek yapılırken gönderilmesi zorunlu değildir. Varsayılan değeri 1’dir. 
+- **rowCount:** Bir rapor sayfasındaki mesaj adedini belirtir. İstek yapılırken gönderilmesi zorunlu değildir.Varsayılan değeri 1000’dir. Maksimum değeri #1000’dir. Bir siparişte 1000’den fazla mesaj gönderilmişse ayrı bir istek ile diğer rapor sayfaları sorgulanmalıdır.
+
+``` ruby
+require 'iletimerkezisms'
 
 argv = {id: order_id page: 1, rowCount: 1000}
 
-# NOT: 
-# page: Rapor sayfasını ifade eder. İstek yapılırken gönderilmesi zorunlu değildir. Varsayılan değeri 1’dir.
-# rowCount: Bir rapor sayfasındaki mesaj adedini belirtir. İstek yapılırken gönderilmesi zorunlu değildir. 
-# Varsayılan değeri 1000’dir. Maksimum değeri #1000’dir. 
-# Bir siparişte 1000’den fazla mesaj gönderilmişse ayrı bir istek ile diğer rapor sayfaları sorgulanmalıdır.
-
 request => IletimerkeziSMS.report(username, password, argv)
-response => {"status"=>{"code"=>"200", "message"=>"İşlem başarılı"},
- 							"order"=>
-								  {"id"=>"7930802",
-								   "status"=>"114",
-								   "message"=>{"number"=>"+905545967632", "status"=>"111"}}
-						}
 
-=> Bakiye Bilgisi Sorgulama
+OR
 
-# Hesabınızda kalan bakiye ve sms bilgisini elde etmenizi sağlar.
+report_object = IletimerkeziSMS::REPORT.new(username, password)
+request => report_object.report(argv)
+
+response => {
+	     "status"=>{"code"=>"200", "message"=>"İşlem başarılı"},
+ 	     "order"=>
+		  {
+		   "id"=>"7930802",
+		   "status"=>"114",
+		   "message"=>{"number"=>"+905545967632", "status"=>"111"}
+		  }
+	     }
+```
+
+### Bakiye Bilgisi Sorgulama
+
+- Hesabınızda kalan bakiye ve sms bilgisini elde etmenizi sağlar.
+
+``` ruby
+require 'iletimerkezisms'
 
 request => IletimerkeziSMS.balance(username, password)
 
-response => {"status"=>{"code"=>"200", "message"=>"İşlem başarılı"}, "balance"=>{"amount"=>"0.0000", "sms"=>"4"}}
+OR
+
+report_object = IletimerkeziSMS::REPORT.new(username, password)
+request => report_object.balance
+
+response => {
+		"status"=>{"code"=>"200", "message"=>"İşlem başarılı"},
+		"balance"=>{"amount"=>"0.0000", "sms"=>"4"}
+	    }
 
 ```
 ## API Dökümanı
-Geliştirmeleri yaparken kullanılan [api dökümanı](https://docs.google.com/document/d/19mYfmnx_BAoO5tPjz2qrCE9LK9qNrafAVZTNqHmi1tQ/edit)
+Geliştirmeleri yaparken kullanılan [API dökümanı](https://docs.google.com/document/d/19mYfmnx_BAoO5tPjz2qrCE9LK9qNrafAVZTNqHmi1tQ/edit)
+
 ## Status Kodlarının Karşılıkları
 
 Status Code  	| Status Message
@@ -112,4 +165,5 @@ Status Code  	| Status Message
 457  | Mesaj gönderim tarihinin formatı hatalı
 503  | Sunucu geçici olarak servis dışı
 
+### İletişim
 İletişim ve öneriler için, irfansubas08@gmail.com
