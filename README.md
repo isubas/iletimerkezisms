@@ -25,10 +25,14 @@ iletimerkezi.com üzerinden toplu sms servisi kullanabilmeniz için verilen kull
 require 'iletimerkezisms'
 
 argv = {
-	:sender=>"ILETI MRKZI",
-	:message=>"Lorem ipsum ...",
-	:numbers=>["905xxxxxxxxx"," +90 5xx xxx xx xx", "5xxxxxxxxx"]
-	}
+        sender: "ILETI MRKZI",
+        message: "Lorem ipsum ...",
+        sendDateTime: "11/03/2016 15:00", #opsiyonel
+        numbers: ["905xxxxxxxxx"," +90 5xx xxx xx xx", "5xxxxxxxxx"]
+       }
+
+# Note: sendDateTime argümanı opsiyoneldir. Zamanlanmış sms gönderimleri için kullanılır. 
+#       Argüman olarak eklenilmeği sürece gönderim zamanı olarak o anki zaman otamatik olarak atanır.
 
 IletimerkeziSMS.send(username, password, argv)
 
@@ -38,9 +42,9 @@ sms = IletimerkeziSMS::SMS.new(username, password)
 sms.send(argv)
 
 response => {
-		"status"=>{"code"=>"200", "message"=>"İşlem başarılı"},
-		"order"=>{"id"=>"order_id"}
-	    }
+              "status"=>{"code"=>"200", "message"=>"İşlem başarılı"},
+              "order"=>{"id"=>"order_id"}
+            }
 
 ```
 
@@ -50,12 +54,15 @@ response => {
 require 'iletimerkezisms'
 
 argv = {sender: "ILETI MRKZI",
-                       messages: [
-                         {text: "Deneme mesajı bir", numbers: ["905xxxxxxxxx"," +90 5xx xxx xx xx", "5xxxxxxxxx"]},
-                         {text: "Deneme mesajı iki", numbers: ["905xxxxxxxxx"," +90 5xx xxx xx xx"]},
-                         {text: "Deneme mesajı üç", numbers: ["905xxxxxxxxx"]}
-                       ]
-                     }
+        sendDateTime: "11/03/2016 15:00",#opsiyonel
+        messages: [
+            {text: "Deneme mesajı bir", numbers: ["905xxxxxxxxx"," +90 5xx xxx xx xx", "5xxxxxxxxx"]},
+            {text: "Deneme mesajı iki", numbers: ["905xxxxxxxxx"," +90 5xx xxx xx xx"]},
+            {text: "Deneme mesajı üç", numbers: ["905xxxxxxxxx"]}
+          ]
+        }
+# Note:  sendDateTime argümanı opsiyoneldir. Zamanlanmış sms gönderimleri için kullanılır. 
+#        Argüman olarak eklenilmeği sürece gönderim zamanı olarak o anki zaman otamatik olarak atanır.
                      
 IletimerkeziSMS.multi_send(username, password, argv)
 
@@ -65,9 +72,9 @@ sms = IletimerkeziSMS::SMS.new(username, password)
 sms.multi_send(argv)
 
 response => {
-	     "status"=>{"code"=>"200", "message"=>"İşlem başarılı"},
-	     "order"=>{"id"=>"order_id"}
-	     }
+             "status"=>{"code"=>"200", "message"=>"İşlem başarılı"},
+             "order"=>{"id"=>"order_id"}
+            }
 ```
 
 ### Yapılan SMS isteğini iptal etmek için,
@@ -108,14 +115,14 @@ report_object = IletimerkeziSMS::REPORT.new(username, password)
 report_object.report(argv)
 
 response => {
-	     "status"=>{"code"=>"200", "message"=>"İşlem başarılı"},
- 	     "order"=>
-		  {
-		   "id"=>"7930802",
-		   "status"=>"114",
-		   "message"=>{"number"=>"+905xxxxxxxxx", "status"=>"111"}
-		  }
-	     }
+              "status"=>{"code"=>"200", "message"=>"İşlem başarılı"},
+              "order"=>
+              {
+               "id"=>"7930802",
+               "status"=>"114",
+               "message"=>{"number"=>"+905xxxxxxxxx", "status"=>"111"}
+              }
+            }
 ```
 
 ### Bakiye Bilgisi Sorgulama
@@ -133,9 +140,9 @@ report_object = IletimerkeziSMS::REPORT.new(username, password)
 report_object.balance
 
 response => {
-		"status"=>{"code"=>"200", "message"=>"İşlem başarılı"},
-		"balance"=>{"amount"=>"0.0000", "sms"=>"4"}
-	    }
+              "status"=>{"code"=>"200", "message"=>"İşlem başarılı"},
+              "balance"=>{"amount"=>"0.0000", "sms"=>"4"}
+            }
 
 ```
 ## API Dökümanı
@@ -143,7 +150,7 @@ Geliştirmeleri yaparken kullanılan [API dökümanı](https://docs.google.com/d
 
 ## Status Kodlarının Karşılıkları
 
-Status Code  	| Status Message
+Status Code   | Status Message
 ------------- | -------------
 110  | Mesaj gönderiliyor
 111  | Mesaj gönderildi
