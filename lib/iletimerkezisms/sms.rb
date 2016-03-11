@@ -24,7 +24,7 @@ module IletimerkeziSMS
           }
           xlm.order {
             xlm.sender argv[:sender]
-            xlm.sendDateTime argv[:sendDateTime]
+            xlm.sendDateTime Time.now.strftime("%d/%m/%Y %H:%M")
             xlm.message {
               xlm.text_ argv[:message]
               xlm.receipents{
