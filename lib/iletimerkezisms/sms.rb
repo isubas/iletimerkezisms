@@ -16,6 +16,7 @@ module IletimerkeziSMS
     # Description: Single Message => Multi Number
     def send(argv)
       path = "send-sms"
+      argv = {sendDateTime: Time.now.strftime("%d/%m/%Y %H:%M")}.merge(argv)
       xml_build = Nokogiri::XML::Builder.new do |xlm|
         xlm.request {
           xlm.authentication {
@@ -24,7 +25,7 @@ module IletimerkeziSMS
           }
           xlm.order {
             xlm.sender argv[:sender]
-            xlm.sendDateTime Time.now.strftime("%d/%m/%Y %H:%M")
+            xlm.sendDateTime argv[:sendDateTime]
             xlm.message {
               xlm.text_ argv[:message]
               xlm.receipents{
@@ -51,6 +52,7 @@ module IletimerkeziSMS
     # Description: Multi Message => Multi Number (Birden fazla farklı mesajı birden fazla farklı kişiye göndermeye yarar.)
     def multi_send(argv)
       path = "send-sms"
+      argv = {sendDateTime: Time.now.strftime("%d/%m/%Y %H:%M")}.merge(argv)
       xml_build = Nokogiri::XML::Builder.new do |xlm|
         xlm.request {
           xlm.authentication {
@@ -59,7 +61,7 @@ module IletimerkeziSMS
           }
           xlm.order {
             xlm.sender argv[:sender]
-            xlm.sendDateTime Time.now.strftime("%d/%m/%Y %H:%M")
+            xlm.sendDateTime argv[:sendDateTime]
             argv[:messages].each do |message|
               xlm.message {
                 xlm.text_ message[:text]
