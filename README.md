@@ -18,6 +18,13 @@ iletimerkezi.com üzerinden toplu sms servisi kullanabilmeniz için verilen kull
 - Desteklenen telefon numara formatları: ["905xxxxxxxxx"," +90 5xx xxx xx xx", "5xxxxxxxxx"]
 - sender: iletimerkezi.com yönetim panelinden tanımlamış ve iletimerkezi.com tarafından onaylanmış, maksimum 11 karakterden oluşan başlık bilgisidir. Gönderilen mesaj, alıcıya bu parametre ile belirtilen başlık ile yollanır. İstek yapılırken gönderilmesi zorunludur. URL encode işleminden geçirilmelidir
 
+### İkinci yöntem
+iletimerkezi.com üzerinden toplu sms servisi kullanabilmeniz için verilen public key ve secret key bilgileri
+- kpublic: "IAMPUBLİC"
+- ksecret: "IAMSECRET"
+- Desteklenen telefon numara formatları: ["905xxxxxxxxx"," +90 5xx xxx xx xx", "5xxxxxxxxx"]
+- sender: iletimerkezi.com yönetim panelinden tanımlamış ve iletimerkezi.com tarafından onaylanmış, maksimum 11 karakterden oluşan başlık bilgisidir. Gönderilen mesaj, alıcıya bu parametre ile belirtilen başlık ile yollanır. İstek yapılırken gönderilmesi zorunludur. URL encode işleminden geçirilmelidir
+
 ## SMS Gönderme
 
 ### Bir mesaj metnini birden fazla alıcıya göndermek için,
@@ -46,6 +53,26 @@ response => {
               "order"=>{"id"=>"order_id"}
             }
 
+```
+#### Veya key, secret ile işlem yapmak için
+``` ruby
+require 'iletimerkezisms'
+
+argv = {
+        api_gateway: true,
+        sender: "ILETI MRKZI",
+        message: "Lorem ipsum ...",
+        sendDateTime: "11/03/2016 15:00", #opsiyonel
+        numbers: ["905xxxxxxxxx"," +90 5xx xxx xx xx", "5xxxxxxxxx"]
+       }
+
+
+IletimerkeziSMS.send(username, password, argv)
+
+response => {
+              "status"=>{"code"=>"200", "message"=>"İşlem başarılı"},
+              "order"=>{"id"=>"order_id"}
+            }
 ```
 
 ### Birden fazla birbirinden farklı mesaj metnini birden fazla alıcıya göndermek için,
@@ -77,6 +104,29 @@ response => {
             }
 ```
 
+#### Veya key, secret ile işlem yapmak için
+``` ruby
+require 'iletimerkezisms'
+
+argv = {
+        sender: "ILETI MRKZI",
+        sendDateTime: "11/03/2016 15:00",#opsiyonel
+        messages: [
+            {text: "Deneme mesajı bir", numbers: ["905xxxxxxxxx"," +90 5xx xxx xx xx", "5xxxxxxxxx"]},
+            {text: "Deneme mesajı iki", numbers: ["905xxxxxxxxx"," +90 5xx xxx xx xx"]},
+            {text: "Deneme mesajı üç", numbers: ["905xxxxxxxxx"]}
+          ]
+       }
+
+
+IletimerkeziSMS.multi_send(username, password, argv)
+
+response => {
+              "status"=>{"code"=>"200", "message"=>"İşlem başarılı"},
+              "order"=>{"id"=>"order_id"}
+            }
+```
+
 ### Yapılan SMS isteğini iptal etmek için,
 
 - Not: order_id: Sms gönderme işlemi sonrasında sunucu tarafından gelen cevaptan bulabilirsiniz.(order_id = response["order"]["id"])
@@ -85,6 +135,9 @@ response => {
 require 'iletimerkezisms'
 
 IletimerkeziSMS.cancel(username, password, order_id)
+
+# public ve secret ile yapmak için
+# IletimerkeziSMS.cancel(public, secret, order_id, true)
 
 OR
 
@@ -133,6 +186,9 @@ response => {
 require 'iletimerkezisms'
 
 IletimerkeziSMS.balance(username, password)
+
+# public ve secret ile yapmak için
+# IletimerkeziSMS.cancel(public, secret, true)
 
 OR
 

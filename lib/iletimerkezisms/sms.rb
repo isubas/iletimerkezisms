@@ -14,7 +14,7 @@ module IletimerkeziSMS
     #        sms.send({sender: "ILETI MRKZI", message: "Lorem Ipsum ...",
     #                 numbers: ["905xxxxxxxxx"," +90 5xx xxx xx xx", "5xxxxxxxxx"]})
     # Description: Single Message => Multi Number
-    def send(argv)
+    def send_via_http(argv)
       path = "send-sms"
       argv = {sendDateTime: Time.now.strftime("%d/%m/%Y %H:%M")}.merge(argv)
       xml_build = Nokogiri::XML::Builder.new do |xlm|
@@ -41,6 +41,39 @@ module IletimerkeziSMS
       return r.request
     end
 
+    # Usage: sms = IletimerkeziSMS::SMS.new("keypublic","keysecret")
+    #        sms.send({sender: "ILETI MRKZI", message: "Lorem Ipsum ...",
+    #                 numbers: ["905xxxxxxxxx"," +90 5xx xxx xx xx", "5xxxxxxxxx"]})
+    # Description: Single Message => Multi Number
+
+    def send_via_gateway(argv)
+      digest = OpenSSL::Digest.new('sha256')
+      hcmac = OpenSSL::HMAC.hexdigest(digest, @password, @username)
+      path = "send-sms"
+      xml_build = Nokogiri::XML::Builder.new do |xlm|
+        xlm.request {
+          xlm.authentication {
+            xlm.key @username
+            xlm.hash_ hcmac
+          }
+          xlm.order {
+            xlm.sender argv[:sender]
+            xlm.sendDateTime Time.now.strftime("%d/%m/%Y %H:%M")
+            xlm.message {
+              xlm.text_ argv[:message]
+              xlm.receipents{
+                argv[:numbers].each do |n|
+                  xlm.number n
+                end
+              }
+            }
+          }
+        }
+      end
+      r = REQUEST.new(path,xml_build.to_xml)
+      return r.request
+    end
+
     # Usage: sms = IletimerkeziSMS::SMS.new("5545967632","5173539")
     #        sms.send({sender: "ILETI MRKZI",
     #                   messages: [
@@ -50,7 +83,7 @@ module IletimerkeziSMS
     #                   ]
     #                 })
     # Description: Multi Message => Multi Number (Birden fazla farklı mesajı birden fazla farklı kişiye göndermeye yarar.)
-    def multi_send(argv)
+    def multi_send_via_http(argv)
       path = "send-sms"
       argv = {sendDateTime: Time.now.strftime("%d/%m/%Y %H:%M")}.merge(argv)
       xml_build = Nokogiri::XML::Builder.new do |xlm|
@@ -78,17 +111,66 @@ module IletimerkeziSMS
       r = REQUEST.new(path,xml_build.to_xml)
       return r.request
     end
+    
+    def multi_send_via_gateway(argv)
+      digest = OpenSSL::Digest.new('sha256')
+      hcmac = OpenSSL::HMAC.hexdigest(digest, @password, @username)
+      path = "send-sms"
+      xml_build = Nokogiri::XML::Builder.new do |xlm|
+        xlm.request {
+          xlm.authentication {
+            xlm.key @username
+            xlm.hash_ hcmac
+          }
+          xlm.order {
+            xlm.sender argv[:sender]
+            xlm.sendDateTime argv[:sendDateTime]
+            argv[:messages].each do |message|
+              xlm.message {
+                xlm.text_ message[:text]
+                xlm.receipents{
+                  message[:numbers].each do |n|
+                    xlm.number n
+                  end
+                }
+              }
+            end
+          }
+        }
+      end
+      r = REQUEST.new(path,xml_build.to_xml)
+      return r.request
+    end
 
     # Usage: sms = IletimerkeziSMS::SMS.new("5545967632","5173539")
     #        sms.cancel("4152")
     # Description: Gönderilen sms paketini iptal etmeye yarar.
-    def cancel(order_id)
+    def cancel_via_http(order_id)
       path = "cancel-order"
       xml_build = Nokogiri::XML::Builder.new do |xlm|
         xlm.request {
           xlm.authentication {
             xlm.username @username
             xlm.password @password
+          }
+          xlm.order {
+            xlm.id_ order_id.to_s
+          }
+        }
+      end
+      r = REQUEST.new(path,xml_build.to_xml)
+      return r.request
+    end
+
+    def cancel_via_gateway(order_id)
+      digest = OpenSSL::Digest.new('sha256')
+      hcmac = OpenSSL::HMAC.hexdigest(digest, @password, @username)
+      path = "send-sms"
+      xml_build = Nokogiri::XML::Builder.new do |xlm|
+        xlm.request {
+          xlm.authentication {
+            xlm.key @username
+            xlm.hash_ hcmac
           }
           xlm.order {
             xlm.id_ order_id.to_s
