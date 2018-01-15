@@ -19,11 +19,10 @@ iletimerkezi.com üzerinden toplu sms servisi kullanabilmeniz için verilen kull
 - sender: iletimerkezi.com yönetim panelinden tanımlamış ve iletimerkezi.com tarafından onaylanmış, maksimum 11 karakterden oluşan başlık bilgisidir. Gönderilen mesaj, alıcıya bu parametre ile belirtilen başlık ile yollanır. İstek yapılırken gönderilmesi zorunludur. URL encode işleminden geçirilmelidir
 
 ### İkinci yöntem
-iletimerkezi.com üzerinden toplu sms servisi kullanabilmeniz için verilen public key ve secret key bilgileri
-- kpublic: "IAMPUBLİC"
-- ksecret: "IAMSECRET"
-- Desteklenen telefon numara formatları: ["905xxxxxxxxx"," +90 5xx xxx xx xx", "5xxxxxxxxx"]
-- sender: iletimerkezi.com yönetim panelinden tanımlamış ve iletimerkezi.com tarafından onaylanmış, maksimum 11 karakterden oluşan başlık bilgisidir. Gönderilen mesaj, alıcıya bu parametre ile belirtilen başlık ile yollanır. İstek yapılırken gönderilmesi zorunludur. URL encode işleminden geçirilmelidir
+iletimerkezi.com üzerinden toplu sms servisi kullanabilmeniz için verilen public key ve secret key bilgileri için yukarıdaki bilgilerde username ve password yerine:
+- public_key: "IAMPUBLİC"
+- secret_key: "IAMSECRET"
+
 
 ## SMS Gönderme
 
@@ -67,7 +66,7 @@ argv = {
        }
 
 
-IletimerkeziSMS.send(username, password, argv)
+IletimerkeziSMS.send(public_key, secret_key, argv)
 
 response => {
               "status"=>{"code"=>"200", "message"=>"İşlem başarılı"},
@@ -119,7 +118,7 @@ argv = {
        }
 
 
-IletimerkeziSMS.multi_send(username, password, argv)
+IletimerkeziSMS.multi_send(public_key, secret_key, argv)
 
 response => {
               "status"=>{"code"=>"200", "message"=>"İşlem başarılı"},
@@ -137,7 +136,7 @@ require 'iletimerkezisms'
 IletimerkeziSMS.cancel(username, password, order_id)
 
 # public ve secret ile yapmak için
-# IletimerkeziSMS.cancel(public, secret, order_id, true)
+# IletimerkeziSMS.cancel(public_key, secret_key, order_id, true)
 
 OR
 
@@ -188,7 +187,7 @@ require 'iletimerkezisms'
 IletimerkeziSMS.balance(username, password)
 
 # public ve secret ile yapmak için
-# IletimerkeziSMS.cancel(public, secret, true)
+# IletimerkeziSMS.balance(public_key, secret_key, true)
 
 OR
 

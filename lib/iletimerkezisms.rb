@@ -22,7 +22,6 @@ module IletimerkeziSMS
     else
       sms.send_via_http(argv)
     end
-    #sms.send(argv)
   end
 
   # argv: {sender: "ILETI MRKZI",
@@ -75,6 +74,5 @@ module IletimerkeziSMS
     else
       sms.report_via_http(argv)
     end
-    #sms.report(argv)
   end
 end
