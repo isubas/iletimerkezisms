@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = "iletimerkezisms"
-  s.version     = "1.0.1"
+  s.version     = "1.1.0"
   s.platform    = Gem::Platform::RUBY
   s.date        = Time.now.strftime("%Y-%m-%d")
   s.summary     = "api.iletimerkezi.com API Ruby SMS GEM"
