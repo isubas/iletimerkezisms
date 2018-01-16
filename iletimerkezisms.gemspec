@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.files       = ["lib/iletimerkezisms.rb", "lib/iletimerkezisms/request.rb", "lib/iletimerkezisms/sms.rb", "lib/iletimerkezisms/report.rb"]
   s.homepage    = "https://github.com/irfansubas/iletimerkezisms"
   s.licenses    = ["MIT"]
-  s.add_dependency "nokogiri", "~>1.6.6" , ">=1.6.6.3"
+  s.add_dependency "nokogiri", "~> 1.8.1"
   s.add_dependency "rest-client","~>1.8", ">=1.8.0"
   s.add_dependency "crack", "~> 0.4", ">=0.4.2"
 end 
